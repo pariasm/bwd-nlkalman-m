@@ -1,3 +1,7 @@
+results/*
+*.mex
+*.mex???
+
 # Prerequisites
 *.d
 
