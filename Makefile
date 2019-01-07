@@ -10,7 +10,7 @@ BIN = iio_read.mexa64 iio_write.mexa64 # for matlab
 
 default : $(BIN)
 
-%.mexglx: %.c iio.o ; $(MEX) $(MXOPTS) $< iio.o $(LDLIBS)
+%.mexa64: %.c iio.o ; $(MEX) $(MXOPTS) $< iio.o $(LDLIBS)
 
 clean   :           ; $(RM) *.o *.mex *.mexa64
 
