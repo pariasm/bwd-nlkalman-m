@@ -52,9 +52,9 @@ U = dct_basis(psz,psz);
 for pay = [1 : stepy : h - psz + 1, h - psz + 1],
 for pax = [1 : stepx : w - psz + 1, w - psz + 1], jj = jj + 1;
 
-	% process only if a pixel inside the patch has low aggregation weight
-	aggw_min = min(reshape(aggw(pay:pay + psz - 1, pax:pax + psz - 1,1),[pdim,1]));
-	if aggw_min > 1, continue; end
+%	% process only if a pixel inside the patch has low aggregation weight
+%	aggw_min = min(reshape(aggw(pay:pay + psz - 1, pax:pax + psz - 1,1),[pdim,1]));
+%	if aggw_min > 1, continue; end
 
 	% -------------------------------------------------- compute patch group
 	% patches in search region
@@ -153,7 +153,7 @@ for pax = [1 : stepx : w - psz + 1, w - psz + 1], jj = jj + 1;
 
 			var1 = var0 + var01;
 			K = var1./(var1 + prams.beta_t * sigma^2);   % Kalman gains
-			X1 = U * ( X0 + diag(K)*(Y1 - X0) );
+			X1 = U * ( diag(K)*Y1 + diag(1 - K) * X0 );
 
 			% variances
 			var1 = (1-K).^2.*var1 + K.^2*sigma^2;
@@ -176,11 +176,13 @@ for pax = [1 : stepx : w - psz + 1, w - psz + 1], jj = jj + 1;
 	end
 
 	if no_time
+
 		% spatial denoising
 		r = prams.r;
 		beta = prams.beta_x;
 		type = prams.filter_type;
 		[X1, var1] = compute_bayes_estimate(Y1, [], sigma, beta, r, type, [], U);
+		X1 = X1(:,1:prams.nx_agg);
 
 		cc = patches.coords(1:prams.nx_agg,:);
 		ivar1 = 1/max(sum(var1), 1e-6);

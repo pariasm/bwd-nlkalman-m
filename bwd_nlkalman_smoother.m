@@ -47,9 +47,9 @@ U = dct_basis(psz,psz);
 for pay = [1 : stepy : h - psz + 1, h - psz + 1],
 for pax = [1 : stepx : w - psz + 1, w - psz + 1], jj = jj + 1;
 
-	% process only if a pixel inside the patch has low aggregation weight
-	aggw_min = min(reshape(aggw(pay:pay + psz - 1, pax:pax + psz - 1,1),[pdim,1]));
-	if aggw_min > 1, continue; end
+%	% process only if a pixel inside the patch has low aggregation weight
+%	aggw_min = min(reshape(aggw(pay:pay + psz - 1, pax:pax + psz - 1,1),[pdim,1]));
+%	if aggw_min > 1, continue; end
 
 	% reference patch
 	if isempty(smoothed1),
@@ -140,7 +140,7 @@ for pax = [1 : stepx : w - psz + 1, w - psz + 1], jj = jj + 1;
 			X1 = U * ( Y1 + diag(K)*(X0 - Y1) );
 
 			% variances
-			var1 = var1 + K.^2.*max(var0 - var1 - var01, 0);
+			var1 = (1-K.^2).*var1 + K.^2.*max(var0 - var01, 0);
 
 			% aggregate
 			cc = patches.coords(1:npatches_agg,:);

@@ -1,3 +1,7 @@
+.*swp
+*.tif
+*.png
+
 results/*
 *.mex
 *.mex???
